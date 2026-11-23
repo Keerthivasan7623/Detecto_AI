@@ -13,6 +13,12 @@ from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable, Image
 )
 
+try:
+    from storage_config import resolve_runtime_path
+except ImportError:
+    def resolve_runtime_path(p):
+        return str(p) if p and Path(p).exists() else None
+
 
 def escape_xml(value: Any) -> str:
     """Safely escapes text for ReportLab XML/HTML Paragraph parsing."""
@@ -433,11 +439,12 @@ def generate_inspection_pdf_report(
 
     # 3. Embedded Annotated Visual Evidence Image
     img_path_str = inspection_res.get("path")
-    if img_path_str and Path(img_path_str).exists():
+    resolved_img = resolve_runtime_path(img_path_str)
+    if resolved_img:
         try:
             story.append(Paragraph("<b>Annotated Photographic Evidence:</b>", h2_style))
             # Fit image neatly on page: width = 530, max height = 280
-            story.append(Image(str(img_path_str), width=530, height=270))
+            story.append(Image(resolved_img, width=530, height=270))
             story.append(Spacer(1, 8))
         except Exception:
             pass
@@ -600,10 +607,11 @@ def generate_capa_ticket_pdf(
 
     # Evidence Thumbnail
     ev_path = violation.get("evidence_path")
-    if ev_path and Path(ev_path).exists():
+    resolved_ev = resolve_runtime_path(ev_path)
+    if resolved_ev:
         try:
             story.append(Paragraph("<b>Photographic Evidence Crop:</b>", styles["Heading3"]))
-            story.append(Image(str(ev_path), width=240, height=180))
+            story.append(Image(resolved_ev, width=240, height=180))
             story.append(Spacer(1, 10))
         except Exception:
             pass
@@ -771,10 +779,11 @@ def generate_investigation_pdf_report(
     story.append(Paragraph("2. Visual Intelligence & Telemetry Evidence", h2_style))
     vis = investigation.get("visual_evidence") or {}
     vis_path = vis.get("annotated_image_path") or investigation.get("visual_evidence_path")
-    if vis_path and Path(vis_path).exists():
+    resolved_vis = resolve_runtime_path(vis_path)
+    if resolved_vis:
         try:
             story.append(Paragraph("<b>Annotated Computer Vision Evidence Crop:</b>", cell_bold))
-            story.append(Image(str(vis_path), width=280, height=190))
+            story.append(Image(resolved_vis, width=280, height=190))
             story.append(Spacer(1, 6))
         except Exception:
             story.append(Paragraph("<i>[Visual evidence image file exists but could not be embedded in PDF]</i>", cell_style))

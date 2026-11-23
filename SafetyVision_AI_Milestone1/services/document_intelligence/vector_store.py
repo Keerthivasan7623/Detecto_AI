@@ -35,9 +35,12 @@ except ImportError:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
     _ST_MODEL = None
 
-VECTOR_STORE_DIR = Path(__file__).resolve().parent.parent.parent / "outputs" / "vector_store"
-INDEX_FILE = VECTOR_STORE_DIR / "faiss_index.bin"
-METADATA_FILE = VECTOR_STORE_DIR / "chunks_metadata.json"
+try:
+    from storage_config import VECTOR_STORE_DIR, INDEX_FILE, METADATA_FILE
+except ImportError:
+    VECTOR_STORE_DIR = Path(__file__).resolve().parent.parent.parent / "outputs" / "vector_store"
+    INDEX_FILE = VECTOR_STORE_DIR / "faiss_index.bin"
+    METADATA_FILE = VECTOR_STORE_DIR / "chunks_metadata.json"
 EMBEDDING_DIM = 384  # Standard dense embedding dimension (compatible with all-MiniLM-L6-v2)
 
 
@@ -300,8 +303,32 @@ class VectorStore:
         self._ensure_storage()
         self.load_index()
 
+    @property
+    def index_file(self) -> Path:
+        try:
+            from storage_config import INDEX_FILE as _IF
+            return _IF
+        except ImportError:
+            return INDEX_FILE
+
+    @property
+    def metadata_file(self) -> Path:
+        try:
+            from storage_config import METADATA_FILE as _MF
+            return _MF
+        except ImportError:
+            return METADATA_FILE
+
+    @property
+    def vector_store_dir(self) -> Path:
+        try:
+            from storage_config import VECTOR_STORE_DIR as _VSD
+            return _VSD
+        except ImportError:
+            return VECTOR_STORE_DIR
+
     def _ensure_storage(self):
-        VECTOR_STORE_DIR.mkdir(parents=True, exist_ok=True)
+        self.vector_store_dir.mkdir(parents=True, exist_ok=True)
 
     def _init_empty_index(self):
         if FAISS_AVAILABLE:
@@ -313,10 +340,10 @@ class VectorStore:
 
     def load_index(self):
         """Loads serialized FAISS binary index and chunks metadata from disk."""
-        if INDEX_FILE.exists() and METADATA_FILE.exists() and FAISS_AVAILABLE:
+        if self.index_file.exists() and self.metadata_file.exists() and FAISS_AVAILABLE:
             try:
-                self.index = faiss.read_index(str(INDEX_FILE))
-                with open(METADATA_FILE, "r", encoding="utf-8") as f:
+                self.index = faiss.read_index(str(self.index_file))
+                with open(self.metadata_file, "r", encoding="utf-8") as f:
                     self.metadata = json.load(f)
                 for m in self.metadata:
                     if not m.get("category"):
@@ -331,10 +358,10 @@ class VectorStore:
         self._ensure_storage()
         if FAISS_AVAILABLE and self.index is not None:
             try:
-                faiss.write_index(self.index, str(INDEX_FILE))
+                faiss.write_index(self.index, str(self.index_file))
             except Exception:
                 pass
-        with open(METADATA_FILE, "w", encoding="utf-8") as f:
+        with open(self.metadata_file, "w", encoding="utf-8") as f:
             json.dump(self.metadata, f, indent=2)
 
     def add_document_chunks(self, chunks: List[Dict[str, Any]]) -> int:

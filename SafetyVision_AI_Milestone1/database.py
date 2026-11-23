@@ -4,7 +4,9 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Set
 
-DB_PATH = Path(__file__).resolve().parent / "safety.db"
+from storage_config import (
+    DB_PATH, DATA_DIR, ensure_storage_directories, init_persistent_storage
+)
 
 
 def utc_now_iso() -> str:
@@ -34,6 +36,7 @@ def get_connection() -> sqlite3.Connection:
 
 def initialize_database():
     """Creates tables and runs additive migrations. Never deletes existing data."""
+    init_persistent_storage()
     with get_connection() as conn:
         conn.execute("PRAGMA journal_mode = WAL")
 

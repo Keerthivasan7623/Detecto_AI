@@ -8,11 +8,14 @@ import streamlit as st
 
 def _clean_html_render(html_content: str) -> None:
     """Renders HTML safely in Streamlit without triggering Markdown indented code block formatting."""
-    cleaned = [
-        line.strip() for line in html_content.splitlines()
-        if line.strip() and not line.strip().startswith("<!--")
-    ]
-    st.markdown(" ".join(cleaned), unsafe_allow_html=True)
+    if hasattr(st, "html"):
+        st.html(html_content)
+    else:
+        cleaned = [
+            line.strip() for line in html_content.splitlines()
+            if line.strip() and not line.strip().startswith("<!--")
+        ]
+        st.markdown(" ".join(cleaned), unsafe_allow_html=True)
 
 
 def _render_card_markup(

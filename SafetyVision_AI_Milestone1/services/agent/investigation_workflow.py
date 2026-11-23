@@ -414,11 +414,14 @@ def visual_evidence_node(state: InvestigationState) -> Dict[str, Any]:
         persons = [d for d in detections if d.get("is_person") or d.get("class", "").lower() == "person"]
 
         # Persist annotated evidence image
-        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        output_dir = os.path.join(root, "outputs", "investigations")
-        os.makedirs(output_dir, exist_ok=True)
+        try:
+            from storage_config import INVESTIGATIONS_DIR
+        except ImportError:
+            root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            INVESTIGATIONS_DIR = Path(root) / "outputs" / "investigations"
+        INVESTIGATIONS_DIR.mkdir(parents=True, exist_ok=True)
         annotated_filename = f"{incident_id}_annotated.jpg"
-        annotated_save_path = os.path.join(output_dir, annotated_filename)
+        annotated_save_path = str(INVESTIGATIONS_DIR / annotated_filename)
         cv2.imwrite(annotated_save_path, annotated_bgr)
         rel_annotated_path = f"outputs/investigations/{annotated_filename}"
 

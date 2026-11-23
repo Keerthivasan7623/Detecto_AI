@@ -33,13 +33,23 @@ SUPPORTED_EXTENSIONS = {
 }
 
 MAX_DOCUMENT_SIZE_BYTES = 50 * 1024 * 1024  # 50 MB
-DOCUMENTS_STORAGE_DIR = Path(__file__).resolve().parent.parent.parent / "outputs" / "documents"
+
+try:
+    from storage_config import DOCUMENTS_DIR
+    DOCUMENTS_STORAGE_DIR = DOCUMENTS_DIR
+except ImportError:
+    DOCUMENTS_STORAGE_DIR = Path(__file__).resolve().parent.parent.parent / "outputs" / "documents"
 
 
 def get_storage_directory() -> Path:
     """Ensures and returns the local documents archive directory."""
-    DOCUMENTS_STORAGE_DIR.mkdir(parents=True, exist_ok=True)
-    return DOCUMENTS_STORAGE_DIR
+    try:
+        from storage_config import DOCUMENTS_DIR
+        storage_dir = DOCUMENTS_DIR
+    except ImportError:
+        storage_dir = Path(__file__).resolve().parent.parent.parent / "outputs" / "documents"
+    storage_dir.mkdir(parents=True, exist_ok=True)
+    return storage_dir
 
 
 def sanitize_filename(filename: str) -> str:

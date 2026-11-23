@@ -106,15 +106,15 @@ from video_utils import cleanup_old_files, make_browser_playable, resize_keep_as
 # ==========================================
 # ENTERPRISE RUNTIME CONFIGURATION
 # ==========================================
-BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "models" / "best.pt"
-OUTPUT_DIR = BASE_DIR / "outputs" / "annotated"
-REPORT_DIR = BASE_DIR / "outputs" / "reports"
-EVIDENCE_DIR = BASE_DIR / "outputs" / "evidence"
-SAMPLE_DIR = BASE_DIR / "datasets" / "construction-ppe" / "images" / "test"
+from storage_config import (
+    DATA_DIR, OUTPUTS_DIR, OUTPUT_DIR, REPORT_DIR, EVIDENCE_DIR,
+    DOCUMENTS_DIR, INVESTIGATIONS_DIR, VECTOR_STORE_DIR,
+    MODEL_PATH, SAMPLE_DIR, ensure_storage_directories,
+    resolve_runtime_path,
+)
 
-for _d in (OUTPUT_DIR, REPORT_DIR, EVIDENCE_DIR):
-    _d.mkdir(parents=True, exist_ok=True)
+BASE_DIR = Path(__file__).resolve().parent
+ensure_storage_directories()
 
 MAX_IMAGE_MB, MAX_VIDEO_MB = 25, 200
 ALL_VIOLATION_CLASSES = sorted(EXPLICIT_VIOLATION_CLASSES)
@@ -158,11 +158,14 @@ apply_theme_css("Light Mode")
 # ==========================================
 def render_html(raw_html: str):
     """Renders raw HTML cleanly in Streamlit without triggering Markdown indented code block parsing."""
-    clean_lines = [
-        line.strip() for line in raw_html.splitlines()
-        if line.strip() and not line.strip().startswith("<!--")
-    ]
-    st.markdown(" ".join(clean_lines), unsafe_allow_html=True)
+    if hasattr(st, "html"):
+        st.html(raw_html)
+    else:
+        clean_lines = [
+            line.strip() for line in raw_html.splitlines()
+            if line.strip() and not line.strip().startswith("<!--")
+        ]
+        st.markdown(" ".join(clean_lines), unsafe_allow_html=True)
 
 
 def enterprise_hud(title: str, subtitle: str, active_zone: str = "All Plant Zones"):
@@ -2790,22 +2793,12 @@ def resolve_evidence_image_path(item: Dict[str, Any]) -> Optional[str]:
         item.get("evidence_path"),
         item.get("output_path"),
     ]
-    app_dir = Path(__file__).resolve().parent
-    workspace_dir = app_dir.parent
-
     for c in candidates:
         if not c or not str(c).strip():
             continue
-        p_str = str(c).strip()
-        p = Path(p_str)
-        if p.exists() and p.is_file():
-            return str(p.resolve())
-        p_app = app_dir / p_str
-        if p_app.exists() and p_app.is_file():
-            return str(p_app.resolve())
-        p_ws = workspace_dir / p_str
-        if p_ws.exists() and p_ws.is_file():
-            return str(p_ws.resolve())
+        resolved = resolve_runtime_path(c)
+        if resolved:
+            return resolved
     return None
 
 

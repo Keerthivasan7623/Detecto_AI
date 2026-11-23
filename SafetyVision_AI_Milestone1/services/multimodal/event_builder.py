@@ -45,26 +45,40 @@ def parse_event_id(event_id: str) -> Dict[str, Any]:
         "is_legacy": False
     }
 
+try:
+    from storage_config import resolve_runtime_path, EVIDENCE_DIR
+except ImportError:
+    def resolve_runtime_path(p):
+        return str(p) if p and Path(p).exists() else None
+    EVIDENCE_DIR = Path("outputs/evidence")
+
+
 def resolve_evidence_snapshot(violation_type: str, explicit_path: Optional[str] = None) -> str:
     """
     Resolves evidence snapshot path. If not explicitly given, points to evidence/
     named by violation type (e.g. no_helmet, no_vest, etc.).
     """
     if explicit_path:
+        resolved = resolve_runtime_path(explicit_path)
+        if resolved:
+            return str(resolved).replace("\\", "/")
         return explicit_path
 
     norm_type = str(violation_type).strip().lower().replace("-", "_")
     candidates = [
-        Path(f"evidence/{norm_type}.jpg"),
-        Path(f"evidence/{norm_type}.png"),
-        Path(f"outputs/evidence/{norm_type}.jpg"),
-        Path(f"outputs/evidence/{norm_type}.png"),
+        f"evidence/{norm_type}.jpg",
+        f"evidence/{norm_type}.png",
+        f"outputs/evidence/{norm_type}.jpg",
+        f"outputs/evidence/{norm_type}.png",
+        EVIDENCE_DIR / f"{norm_type}.jpg",
+        EVIDENCE_DIR / f"{norm_type}.png",
     ]
     for c in candidates:
-        if c.exists():
-            return str(c).replace("\\", "/")
+        res = resolve_runtime_path(c)
+        if res:
+            return str(res).replace("\\", "/")
 
-    return f"evidence/{norm_type}.jpg"
+    return f"outputs/evidence/{norm_type}.jpg"
 
 def build_event_from_detection(
     detection: Dict[str, Any],
