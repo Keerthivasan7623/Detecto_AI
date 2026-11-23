@@ -1,0 +1,45 @@
+
+# Environment variables & secrets
+.env
+*.env
+.env.*
+.venv/
+env/
+venv/
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+safety.db
+
+# YOLO Training & Checkpoints
+*.pt
+*.pth
+*.onnx
+*.engine
+models/*.pt
+weights/
+runs/
+
+# Large training datasets
+datasets/
+
+# Output media, documents & generated reports
+outputs/
+
+# System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Preserve the trained production PPE model
+!models/
+!models/best.pt

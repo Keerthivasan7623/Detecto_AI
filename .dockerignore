@@ -1,0 +1,117 @@
+# ==============================================================================
+# SafetyVision AI - Docker Build Ignore File
+# Excludes virtual environments, environment files, git metadata, caches,
+# temporary files, and heavy development artifacts.
+# ==============================================================================
+
+# Secrets and environment configurations
+.env
+*.env
+.env.*
+**/.env
+**/.env.*
+
+# Python Virtual Environments
+.venv
+.venv/**
+**/.venv
+**/.venv/**
+venv
+venv/**
+**/venv/**
+env
+env/**
+**/env/**
+
+# Git metadata and repository configuration
+.git
+.git/**
+**/.git
+**/.git/**
+.gitignore
+**/.gitignore
+.gitattributes
+**/.gitattributes
+.github
+**/.github/**
+
+# Python bytecode and build caches
+__pycache__
+__pycache__/**
+**/__pycache__
+**/__pycache__/**
+*.py[cod]
+**/*.py[cod]
+*$py.class
+*.so
+.pytest_cache
+**/.pytest_cache/**
+.coverage
+htmlcov
+htmlcov/**
+
+# Editor and OS-specific files
+.vscode
+**/.vscode/**
+.idea
+**/.idea/**
+.DS_Store
+**/.DS_Store
+Thumbs.db
+**/Thumbs.db
+.agents
+**/.agents/**
+skills-lock.json
+
+# Development scratch files and test suites (unnecessary for container runtime)
+scratch
+scratch/**
+**/scratch
+**/scratch/**
+test_*.py
+**/test_*.py
+*.docx
+check_db.py
+generate_report_doc.py
+train_model.py
+
+# Redundant and backup database files
+safety_backup.db
+safety_original.db
+safety.db.live_bak
+safetyvision.db
+**/*_backup.db
+**/*_original.db
+**/*.live_bak
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Large training datasets and training experiment runs
+datasets
+datasets/**
+**/datasets/**
+runs
+runs/**
+**/runs/**
+weights
+weights/**
+**/weights/**
+yolo26n.pt
+**/yolo26n.pt
+
+# Output media & report artifacts (persisted at runtime via volume mount)
+outputs
+outputs/**
+**/outputs/**
+
+# ==============================================================================
+# EXPLICIT MODEL CHECKPOINT WHITELIST (Do NOT exclude models/best.pt)
+# ==============================================================================
+!models
+!models/**
+!**/models
+!**/models/**
+!models/best.pt
+!**/models/best.pt
+!SafetyVision_AI_Milestone1/models/best.pt

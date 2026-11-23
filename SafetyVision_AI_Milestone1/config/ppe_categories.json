@@ -1,0 +1,28 @@
+{
+  "category_mapping": {
+    "helmet": "Head",
+    "no_helmet": "Head",
+    "no-helmet": "Head",
+    "goggles": "Eyes",
+    "no_goggle": "Eyes",
+    "gloves": "Hands",
+    "no_gloves": "Hands",
+    "vest": "Torso",
+    "no_vest": "Torso",
+    "no-vest": "Torso",
+    "boots": "Feet",
+    "no_boots": "Feet",
+    "none": "Other",
+    "Person": "Subject"
+  },
+  "confidence_threshold": 0.5,
+  "min_bbox_area": 0.0,
+  "temporal_persistence": {
+    "_comment": "Starting defaults / unvalidated heuristics",
+    "n": 3,
+    "m": 5,
+    "iou_threshold": 0.25,
+    "centroid_dist_threshold": 50.0,
+    "time_window_seconds": 2.0
+  }
+}

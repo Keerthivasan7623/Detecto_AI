@@ -1,0 +1,146 @@
+# ==============================================================================
+# SafetyVision AI - Production Git Ignore Configuration
+# Repository Root: Outer SafetyVision_AI_Milestone1
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Environment Secrets & Configuration Files
+# ------------------------------------------------------------------------------
+.env
+*.env
+.env.*
+.env.local
+.env.development
+.env.production
+**/.env
+**/*.env
+**/.env.*
+
+# ------------------------------------------------------------------------------
+# 2. Virtual Environments & Package Managers
+# ------------------------------------------------------------------------------
+.venv/
+**/.venv/
+venv/
+**/venv/
+env/
+**/env/
+ENV/
+**/ENV/
+
+# ------------------------------------------------------------------------------
+# 3. Python Bytecode, Caches & Coverage
+# ------------------------------------------------------------------------------
+__pycache__/
+**/__pycache__/
+*.py[cod]
+**/*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+**/.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ------------------------------------------------------------------------------
+# 4. Git Metadata & IDE / OS Configurations
+# ------------------------------------------------------------------------------
+.vscode/
+**/.vscode/
+.idea/
+**/.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+**/.DS_Store
+Thumbs.db
+**/Thumbs.db
+.agents/
+**/.agents/
+skills-lock.json
+
+# ------------------------------------------------------------------------------
+# 5. SQLite Databases, WAL Journals & Database Backups
+# ------------------------------------------------------------------------------
+*.db
+**/*.db
+*.sqlite
+**/*.sqlite
+*.sqlite3
+**/*.sqlite3
+*.db-wal
+**/*.db-wal
+*.db-shm
+**/*.db-shm
+*.db-journal
+**/*.db-journal
+*.live_bak
+**/*.live_bak
+*_backup.db
+**/*_backup.db
+*_original.db
+**/*_original.db
+safetyvision.db
+**/safetyvision.db
+
+# ------------------------------------------------------------------------------
+# 6. Runtime-Generated Application Outputs
+# ------------------------------------------------------------------------------
+outputs/
+**/outputs/
+
+# ------------------------------------------------------------------------------
+# 7. Datasets, Training Runs, Scratch Directories & Test Files
+# ------------------------------------------------------------------------------
+datasets/
+**/datasets/
+runs/
+**/runs/
+weights/
+**/weights/
+scratch/
+**/scratch/
+test_*.py
+**/test_*.py
+check_db.py
+generate_report_doc.py
+train_model.py
+
+# ------------------------------------------------------------------------------
+# 8. Temporary Logs & Generated Report Documents
+# ------------------------------------------------------------------------------
+*.log
+**/*.log
+logs/
+**/logs/
+*.docx
+**/*.docx
+
+# ------------------------------------------------------------------------------
+# 9. General YOLO Model Weights & Checkpoints
+# ------------------------------------------------------------------------------
+*.pt
+**/*.pt
+*.pth
+**/*.pth
+*.onnx
+**/*.onnx
+*.engine
+**/*.engine
+yolo26n.pt
+**/yolo26n.pt
+
+# ==============================================================================
+# MODEL PRESERVATION WHITELIST (DO NOT IGNORE models/best.pt)
+# ==============================================================================
+!models/
+!**/models/
+!models/best.pt
+!**/models/best.pt
+!SafetyVision_AI_Milestone1/models/best.pt
+
+# Previous Git history backup
+**/.git_backup/

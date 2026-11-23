@@ -1,0 +1,73 @@
+# ==============================================================================
+# SafetyVision AI - Subdirectory Docker Build Ignore File
+# ==============================================================================
+
+# Secrets and environment configurations
+.env
+*.env
+.env.*
+
+# Python Virtual Environments
+.venv
+.venv/**
+venv
+venv/**
+env
+env/**
+
+# Git metadata
+.git
+.git/**
+.gitignore
+.gitattributes
+
+# Python bytecode and caches
+__pycache__
+__pycache__/**
+*.py[cod]
+*$py.class
+*.so
+
+# Editor & OS metadata
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Development scratch files and test suites
+scratch
+scratch/**
+test_*.py
+*.docx
+check_db.py
+generate_report_doc.py
+train_model.py
+
+# Redundant and backup database files
+safety_backup.db
+safety_original.db
+safety.db.live_bak
+safetyvision.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Large training datasets and training experiment runs
+datasets
+datasets/**
+runs
+runs/**
+weights
+weights/**
+yolo26n.pt
+
+# Output media & report artifacts (persisted at runtime via volume mount)
+outputs
+outputs/**
+
+# ==============================================================================
+# EXPLICIT MODEL CHECKPOINT WHITELIST (Do NOT exclude models/best.pt)
+# ==============================================================================
+!models
+!models/**
+!models/best.pt

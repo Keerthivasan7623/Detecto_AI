@@ -1,0 +1,81 @@
+{
+  "framework_name": "SafetyVision AI Enterprise Risk Assessment Matrix",
+  "version": "1.0.0",
+  "hazard_categories": {
+    "Working at Heights": {
+      "description": "Scaffolding, roofing, elevated platforms, ladders, and unprotected leading edges (>1.8m).",
+      "mandatory_ppe": ["safety_harness", "helmet", "safety_boots"],
+      "severity_baseline": 4,
+      "typical_violations": ["no_harness", "unanchored_lifeline", "no_helmet"],
+      "keywords": ["heights", "scaffold", "ladder", "fall", "harness", "elevated", "roof", "platform", "drop"]
+    },
+    "Hot Work & Welding": {
+      "description": "Welding, torch cutting, brazing, grinding, and open flame thermal operations.",
+      "mandatory_ppe": ["welding_mask", "face_shield", "flame_resistant_gloves", "leather_vest", "safety_boots"],
+      "severity_baseline": 3,
+      "typical_violations": ["no_mask", "no_gloves", "missing_fire_watch", "flammable_proximity"],
+      "keywords": ["welding", "hot work", "torch", "spark", "cutting", "flame", "brazing", "grinding"]
+    },
+    "Electrical Safety": {
+      "description": "Live conductors, high voltage distribution, switchgear, panel maintenance, and lock-out/tag-out.",
+      "mandatory_ppe": ["dielectric_gloves", "arc_flash_shield", "insulated_boots", "helmet"],
+      "severity_baseline": 4,
+      "typical_violations": ["no_dielectric_gloves", "unlocked_breaker", "missing_loto", "water_proximity"],
+      "keywords": ["electrical", "electric", "voltage", "switchgear", "panel", "shock", "loto", "conduit", "breaker"]
+    },
+    "Heavy Machinery & Struck-By": {
+      "description": "Cranes, forklifts, excavators, suspended loads, moving mobile plant, and vehicular traffic.",
+      "mandatory_ppe": ["high_visibility_vest", "helmet", "steel_toe_boots", "hearing_protection"],
+      "severity_baseline": 3,
+      "typical_violations": ["no_vest", "no_helmet", "in_blind_spot", "under_suspended_load"],
+      "keywords": ["machinery", "crane", "forklift", "excavator", "traffic", "struck", "vehicle", "load", "mobile plant"]
+    },
+    "Chemical & Hazardous Materials": {
+      "description": "Toxic substances, acid/alkali handling, fumes, dust, confined space atmosphere, solvent vapors.",
+      "mandatory_ppe": ["respirator", "chemical_goggles", "nitrile_gloves", "chemical_apron"],
+      "severity_baseline": 3,
+      "typical_violations": ["no_respirator", "no_goggles", "no_gloves", "inadequate_ventilation"],
+      "keywords": ["chemical", "fumes", "toxic", "acid", "solvent", "dust", "vapor", "respirator", "spill"]
+    },
+    "General Construction & PPE": {
+      "description": "Standard active construction, civil works, warehouse maintenance, and physical handling.",
+      "mandatory_ppe": ["helmet", "vest", "safety_boots"],
+      "severity_baseline": 2,
+      "typical_violations": ["no_helmet", "no_vest", "no_boots"],
+      "keywords": ["construction", "site", "worker", "helmet", "vest", "boots", "ppe", "housekeeping", "walkway"]
+    }
+  },
+  "severity_scale": {
+    "1": { "label": "Minor", "score": 1, "description": "Superficial injuries, first-aid case, no lost work days." },
+    "2": { "label": "Moderate", "score": 2, "description": "Medical treatment required, short-term lost work days (<3 days)." },
+    "3": { "label": "Serious", "score": 3, "description": "Severe injury, fractures, burns, prolonged lost work time." },
+    "4": { "label": "Severe", "score": 4, "description": "Irreversible harm, amputation, life-threatening critical trauma." },
+    "5": { "label": "Catastrophic", "score": 5, "description": "Fatality or multiple permanent disabilities." }
+  },
+  "likelihood_scale": {
+    "1": { "label": "Rare", "score": 1, "description": "Practically impossible or occurs once every 10+ years." },
+    "2": { "label": "Unlikely", "score": 2, "description": "Could occur under rare combined failure conditions." },
+    "3": { "label": "Possible", "score": 3, "description": "Has occurred occasionally across industry or site history." },
+    "4": { "label": "Likely", "score": 4, "description": "High probability of occurrence during routine shifts." },
+    "5": { "label": "Almost Certain", "score": 5, "description": "Continuous unsafe condition; incident imminent without intervention." }
+  },
+  "risk_matrix": {
+    "thresholds": {
+      "Low": { "min": 1, "max": 4, "color": "#16a34a", "action": "Routine control monitoring and standard toolbox briefing." },
+      "Medium": { "min": 5, "max": 9, "color": "#d97706", "action": "Supervisory review, corrective action within 24 hours, mandatory PPE audit." },
+      "High": { "min": 10, "max": 15, "color": "#ea580c", "action": "Immediate job pause or halt until control measures, permit re-check, and PPE compliance are verified." },
+      "Critical": { "min": 16, "max": 25, "color": "#dc2626", "action": "IMMEDIATE STOP WORK ORDER. Evacuate zone, notify EHS Director, lock out hazards, full formal inquiry." }
+    }
+  },
+  "uncertainty_guidelines": {
+    "visual_confidence_threshold": 0.35,
+    "high_uncertainty_visual_cutoff": 0.50,
+    "policy_relevance_threshold": 0.20,
+    "rules": [
+      "If visual evidence is missing or marked unavailable, flag visual uncertainty and base findings strictly on verbal narrative and indexed policies.",
+      "If detected bounding box confidence is between 0.35 and 0.50, flag detection ambiguity and recommend on-site manual supervisor validation.",
+      "If policy similarity score is below 0.20, explicitly document a policy retrieval gap rather than fabricating compliance clauses.",
+      "If incident narrative lacks specific location or machinery details, annotate environmental uncertainty in the report."
+    ]
+  }
+}
