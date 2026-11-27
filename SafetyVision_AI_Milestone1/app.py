@@ -202,6 +202,11 @@ def render_page_header(title: str, subtitle: str, active_zone: str = "All Plant 
     enterprise_hud(title, subtitle, active_zone)
 
 
+def handle_quick_nav(target_page: str) -> None:
+    """Safely queues page navigation via session state before the next widget pass."""
+    st.session_state["redirect_to_page"] = target_page
+
+
 def render_welcome_section(user_info: Optional[Dict[str, Any]] = None):
     """Renders a personalized welcome banner with date/shift telemetry and quick-action navigation shortcuts."""
     if user_info is None:
@@ -249,25 +254,41 @@ def render_welcome_section(user_info: Optional[Dict[str, Any]] = None):
     # Quick Action Navigation Shortcuts
     q_col1, q_col2, q_col3, q_col4 = st.columns(4)
     with q_col1:
-        if st.button("📸  New Safety Inspection", key="quick_btn_inspection", use_container_width=True, help="Analyze uploaded image or video stream"):
-            st.session_state["nav_radio"] = PAGE_IMAGE_VIDEO_ANALYSIS
-            st.session_state["current_page"] = PAGE_IMAGE_VIDEO_ANALYSIS
-            st.rerun()
+        st.button(
+            "📸  New Safety Inspection",
+            key="quick_btn_inspection",
+            use_container_width=True,
+            help="Analyze uploaded image or video stream",
+            on_click=handle_quick_nav,
+            args=(PAGE_IMAGE_VIDEO_ANALYSIS,)
+        )
     with q_col2:
-        if st.button("📄  View Reports", key="quick_btn_reports", use_container_width=True, help="Review audit logs and export PDF/CSV reports"):
-            st.session_state["nav_radio"] = PAGE_REPORTS_EXPORT
-            st.session_state["current_page"] = PAGE_REPORTS_EXPORT
-            st.rerun()
+        st.button(
+            "📄  View Reports",
+            key="quick_btn_reports",
+            use_container_width=True,
+            help="Review audit logs and export PDF/CSV reports",
+            on_click=handle_quick_nav,
+            args=(PAGE_REPORTS_EXPORT,)
+        )
     with q_col3:
-        if st.button("🤖  AI Investigations", key="quick_btn_investigation", use_container_width=True, help="Autonomous LangGraph multi-agent safety incident triage"):
-            st.session_state["nav_radio"] = PAGE_LANGGRAPH_INVESTIGATION
-            st.session_state["current_page"] = PAGE_LANGGRAPH_INVESTIGATION
-            st.rerun()
+        st.button(
+            "🤖  AI Investigations",
+            key="quick_btn_investigation",
+            use_container_width=True,
+            help="Autonomous LangGraph multi-agent safety incident triage",
+            on_click=handle_quick_nav,
+            args=(PAGE_LANGGRAPH_INVESTIGATION,)
+        )
     with q_col4:
-        if st.button("📚  Document Intelligence", key="quick_btn_docs", use_container_width=True, help="Ingest safety policies, SOPs, and query EHS knowledge base"):
-            st.session_state["nav_radio"] = PAGE_DOCUMENT_INGESTION
-            st.session_state["current_page"] = PAGE_DOCUMENT_INGESTION
-            st.rerun()
+        st.button(
+            "📚  Document Intelligence",
+            key="quick_btn_docs",
+            use_container_width=True,
+            help="Ingest safety policies, SOPs, and query EHS knowledge base",
+            on_click=handle_quick_nav,
+            args=(PAGE_DOCUMENT_INGESTION,)
+        )
 
 
 def render_kpi_card(title: str, value: Any, description: str = "", icon: str = "📊", delta: Optional[str] = None, delta_type: str = "normal"):
