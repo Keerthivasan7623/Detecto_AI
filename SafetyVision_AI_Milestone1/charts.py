@@ -11,20 +11,19 @@ import plotly.graph_objects as go
 # ==========================================
 # TASTE SKILL ENTERPRISE COLOR PALETTE
 # ==========================================
-TEAL = "#0F8B8D"         # Professional Teal
-NAVY = "#172B4D"         # Deep Navy
-PURPLE = "#7357D9"       # AI Purple
-LIGHT_BLUE = "#EAF2FF"   # Light Blue Accent
-INFO_BLUE = "#3276C8"    # Information Blue
-GREEN = "#16845B"        # Success Green
-AMBER = "#D99A22"        # Warning Amber
-RED = "#D94B4B"          # Danger Red
-SLATE = "#87909D"        # Muted Slate
-TEXT_PRIMARY = "#171A21" # Primary Text
-TEXT_SECONDARY = "#5B6472" # Secondary Text
-
-# Backward compatibility aliases
-BLUE = TEAL
+NAVY = "#0F172A"         # Deep Navy / Slate
+GREEN = "#16A34A"        # Safe / Compliant Green
+AMBER = "#F59E0B"        # Warning / Moderate Amber
+RED = "#EF4444"          # Critical / Violation Red
+BLUE = "#2563EB"         # Primary / Analytics Blue
+PURPLE = "#7C3AED"       # Violet / AI
+VIOLET = "#7C3AED"       # Violet / AI
+TEAL = "#0D9488"         # Crisp Teal
+LIGHT_BLUE = "#EFF6FF"   # Light Blue Accent
+INFO_BLUE = "#2563EB"    # Information Blue
+SLATE = "#64748B"        # Muted Slate
+TEXT_PRIMARY = "#0F172A" # Primary Text
+TEXT_SECONDARY = "#64748B" # Secondary Text
 
 STATUS_COLORS = {
     "pending": AMBER,
@@ -72,8 +71,8 @@ def _style(fig: go.Figure, height: int = 330) -> go.Figure:
         title_font=dict(color=TEXT_PRIMARY, size=12)
     )
     fig.update_yaxes(
-        gridcolor="rgba(23, 26, 33, 0.06)",
-        zerolinecolor="rgba(23, 26, 33, 0.06)",
+        gridcolor="#F1F5F9",
+        zerolinecolor="#E2E8F0",
         color=TEXT_PRIMARY,
         tickfont=dict(color=TEXT_SECONDARY, size=11),
         title_font=dict(color=TEXT_PRIMARY, size=12)
@@ -91,7 +90,7 @@ def category_bar(rows: List[Dict[str, Any]]) -> Optional[go.Figure]:
         x="Category",
         y="Incidents",
         text="Incidents",
-        color_discrete_sequence=[TEAL]
+        color_discrete_sequence=[BLUE]
     )
     fig.update_traces(
         textposition="outside",
@@ -105,12 +104,12 @@ def category_donut(rows: List[Dict[str, Any]]) -> Optional[go.Figure]:
     if not rows:
         return None
     df = pd.DataFrame(rows)
-    palette_cycle = [TEAL, RED, AMBER, PURPLE, INFO_BLUE, NAVY, SLATE]
+    palette_cycle = [BLUE, RED, AMBER, PURPLE, TEAL, NAVY, SLATE]
     fig = go.Figure(go.Pie(
         labels=[str(r.get("category", "")).replace("_", " ").title() for r in rows],
         values=[r.get("count", 0) for r in rows],
-        hole=0.60,
-        marker=dict(colors=palette_cycle[:len(rows)]),
+        hole=0.62,
+        marker=dict(colors=palette_cycle[:len(rows)], line=dict(color="#FFFFFF", width=2)),
         textinfo="percent",
         hovertemplate="<b>%{label}</b><br>Incidents: %{value}<br>Share: %{percent}<extra></extra>"
     ))
@@ -125,8 +124,8 @@ def status_donut(rows: List[Dict[str, Any]]) -> Optional[go.Figure]:
     fig = go.Figure(go.Pie(
         labels=[s.title() for s in df["status"]],
         values=df["count"],
-        hole=0.60,
-        marker=dict(colors=[STATUS_COLORS.get(s.lower(), SLATE) for s in df["status"]]),
+        hole=0.62,
+        marker=dict(colors=[STATUS_COLORS.get(s.lower(), SLATE) for s in df["status"]], line=dict(color="#FFFFFF", width=2)),
         textinfo="percent",
         hovertemplate="<b>%{label}</b><br>Count: %{value}<br>Ratio: %{percent}<extra></extra>"
     ))
@@ -146,9 +145,9 @@ def compliance_gauge(rate: Optional[float]) -> Optional[go.Figure]:
             "axis": {"range": [0, 100], "tickcolor": TEXT_SECONDARY, "tickfont": {"color": TEXT_SECONDARY}},
             "bar": {"color": color},
             "steps": [
-                {"range": [0, 70], "color": "rgba(217, 75, 75, 0.12)"},
-                {"range": [70, 90], "color": "rgba(217, 154, 34, 0.12)"},
-                {"range": [90, 100], "color": "rgba(22, 132, 91, 0.12)"}
+                {"range": [0, 70], "color": "rgba(239, 68, 68, 0.10)"},
+                {"range": [70, 90], "color": "rgba(245, 158, 11, 0.10)"},
+                {"range": [90, 100], "color": "rgba(22, 163, 74, 0.10)"}
             ]
         }
     ))
@@ -166,7 +165,7 @@ def class_counts_bar(counts: Dict[str, int]) -> Optional[go.Figure]:
         x="Detections",
         y="Class",
         orientation="h",
-        color_discrete_sequence=[TEAL]
+        color_discrete_sequence=[BLUE]
     )
     fig.update_traces(marker=dict(line=dict(width=0)))
     return _style(fig)
@@ -185,8 +184,8 @@ def daily_trend(rows: List[Dict[str, Any]]) -> Optional[go.Figure]:
         color_discrete_sequence=[RED]
     )
     fig.update_traces(
-        line=dict(width=2.5),
-        fillcolor="rgba(217, 75, 75, 0.10)"
+        line=dict(width=2.5, color=RED),
+        fillcolor="rgba(239, 68, 68, 0.08)"
     )
     return _style(fig)
 
@@ -206,7 +205,7 @@ def hourly_bar(rows: List[Dict[str, Any]]) -> Optional[go.Figure]:
         x="hour",
         y="count",
         labels={"hour": "Hour of Day (24h)", "count": "Violations"},
-        color_discrete_sequence=[TEAL]
+        color_discrete_sequence=[BLUE]
     )
     return _style(fig)
 
@@ -239,7 +238,7 @@ def category_trend(rows: List[Dict[str, Any]]) -> Optional[go.Figure]:
         y="count",
         color="violation_type",
         labels={"date": "Date", "count": "Violations", "violation_type": "Equipment Category"},
-        color_discrete_sequence=[TEAL, RED, AMBER, PURPLE, INFO_BLUE]
+        color_discrete_sequence=[BLUE, RED, AMBER, PURPLE, TEAL]
     )
     return _style(fig)
 
@@ -270,13 +269,13 @@ def weekday_hour_heatmap(rows: List[Dict[str, Any]]) -> Optional[go.Figure]:
     grid = df.pivot_table(index="weekday", columns="hour", values="count", fill_value=0)
     grid = grid.reindex(index=range(7), columns=range(24), fill_value=0)
     
-    # Custom elegant light heatmap colorscale: light teal to deep red
+    # Custom elegant light heatmap colorscale: light blue to warning amber to danger red
     custom_colorscale = [
         [0.0, "#FFFFFF"],
-        [0.2, "#EDF4FC"],
-        [0.5, "#FEF7EA"],
-        [0.8, "#F7BDBD"],
-        [1.0, "#D94B4B"]
+        [0.2, "#EFF6FF"],
+        [0.5, "#FEF3C7"],
+        [0.8, "#FCA5A5"],
+        [1.0, "#EF4444"]
     ]
     
     fig = go.Figure(go.Heatmap(
@@ -317,9 +316,9 @@ def safety_index_gauge(score: float, rating: str = "") -> Optional[go.Figure]:
             "axis": {"range": [0, 100], "tickcolor": TEXT_SECONDARY, "tickfont": {"color": TEXT_SECONDARY}},
             "bar": {"color": color},
             "steps": [
-                {"range": [0, 65], "color": "rgba(217, 75, 75, 0.12)"},
-                {"range": [65, 80], "color": "rgba(217, 154, 34, 0.12)"},
-                {"range": [80, 100], "color": "rgba(22, 132, 91, 0.12)"}
+                {"range": [0, 65], "color": "rgba(239, 68, 68, 0.10)"},
+                {"range": [65, 80], "color": "rgba(245, 158, 11, 0.10)"},
+                {"range": [80, 100], "color": "rgba(22, 163, 74, 0.10)"}
             ]
         }
     ))
@@ -343,8 +342,8 @@ def ppe_radar_chart(category_dict: Dict[str, float]) -> Optional[go.Figure]:
         theta=categories,
         fill="toself",
         name="Target Benchmark (95%)",
-        line=dict(color="rgba(15, 139, 141, 0.6)", dash="dash"),
-        fillcolor="rgba(15, 139, 141, 0.06)"
+        line=dict(color="rgba(37, 99, 235, 0.6)", dash="dash"),
+        fillcolor="rgba(37, 99, 235, 0.05)"
     ))
     # Plant Actual
     fig.add_trace(go.Scatterpolar(
@@ -353,13 +352,13 @@ def ppe_radar_chart(category_dict: Dict[str, float]) -> Optional[go.Figure]:
         fill="toself",
         name="Plant Actual Compliance",
         line=dict(color=GREEN, width=2.5),
-        fillcolor="rgba(22, 132, 91, 0.18)"
+        fillcolor="rgba(22, 163, 74, 0.16)"
     ))
     fig.update_layout(
         template="plotly_white",
         polar=dict(
-            radialaxis=dict(visible=True, range=[0, 100], color=TEXT_SECONDARY, gridcolor="rgba(23, 26, 33, 0.08)", tickfont=dict(color=TEXT_SECONDARY)),
-            angularaxis=dict(color=TEXT_PRIMARY, gridcolor="rgba(23, 26, 33, 0.08)", tickfont=dict(color=TEXT_PRIMARY, size=11))
+            radialaxis=dict(visible=True, range=[0, 100], color=TEXT_SECONDARY, gridcolor="#E2E8F0", tickfont=dict(color=TEXT_SECONDARY)),
+            angularaxis=dict(color=TEXT_PRIMARY, gridcolor="#E2E8F0", tickfont=dict(color=TEXT_PRIMARY, size=11))
         ),
         showlegend=True,
         legend=dict(orientation="h", y=-0.22, x=0, font=dict(color=TEXT_PRIMARY, size=11)),
@@ -402,12 +401,12 @@ def capa_status_donut(capa_stats: Dict[str, Any]) -> Optional[go.Figure]:
               capa_stats.get("verified", 0), capa_stats.get("closed", 0)]
     if sum(values) == 0:
         return None
-    colors = [RED, AMBER, TEAL, GREEN]
+    colors = [RED, AMBER, BLUE, GREEN]
     fig = go.Figure(go.Pie(
         labels=labels,
         values=values,
-        hole=0.60,
-        marker=dict(colors=colors),
+        hole=0.62,
+        marker=dict(colors=colors, line=dict(color="#FFFFFF", width=2)),
         textinfo="percent",
         hovertemplate="<b>%{label} Actions</b><br>Count: %{value}<br>Ratio: %{percent}<extra></extra>"
     ))

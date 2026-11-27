@@ -202,6 +202,74 @@ def render_page_header(title: str, subtitle: str, active_zone: str = "All Plant 
     enterprise_hud(title, subtitle, active_zone)
 
 
+def render_welcome_section(user_info: Optional[Dict[str, Any]] = None):
+    """Renders a personalized welcome banner with date/shift telemetry and quick-action navigation shortcuts."""
+    if user_info is None:
+        user_info = get_current_user() or {"full_name": "Safety Officer", "role": "admin", "workplace": "HQ Operations"}
+
+    user_name = user_info.get("full_name") or "Safety Officer"
+    role_str = str(user_info.get("role", "admin")).upper()
+    role_pill_cls = "pill-blue" if role_str == "ADMIN" else "pill-slate"
+    user_workplace = user_info.get("workplace") or "HQ Operations"
+
+    now = datetime.now()
+    formatted_date = now.strftime("%A, %b %d, %Y")
+    shift_str = determine_shift()
+
+    render_html(f"""
+    <div style="background:linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%); border:1px solid #E2E8F0; border-radius:14px; padding:1.15rem 1.4rem; margin-bottom:1rem; box-shadow:0 1px 4px rgba(15,23,42,0.03);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+            <div>
+                <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.25rem;">
+                    <div style="font-size:1.3rem; font-weight:800; color:#0F172A; letter-spacing:-0.025em; margin:0;">
+                        Welcome back, {user_name} 👋
+                    </div>
+                    <span class="sv-pill {role_pill_cls}" style="font-size:0.65rem; padding:0.12rem 0.5rem;">
+                        {role_str}
+                    </span>
+                </div>
+                <div style="font-size:0.82rem; color:#64748B; margin:0;">
+                    Detecto AI &bull; Workplace Safety Vision &amp; Real-time PPE Compliance Platform
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; padding:0.35rem 0.75rem; display:flex; align-items:center; gap:0.45rem; font-size:0.75rem; color:#0F172A; font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,0.02);">
+                    <span>📅 {formatted_date}</span>
+                    <span style="color:#CBD5E1;">|</span>
+                    <span style="color:#16A34A; font-weight:700;">● {shift_str}</span>
+                </div>
+                <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:8px; padding:0.35rem 0.75rem; font-size:0.75rem; color:#64748B; font-weight:600;">
+                    📍 {user_workplace}
+                </div>
+            </div>
+        </div>
+    </div>
+    """)
+
+    # Quick Action Navigation Shortcuts
+    q_col1, q_col2, q_col3, q_col4 = st.columns(4)
+    with q_col1:
+        if st.button("📸  New Safety Inspection", key="quick_btn_inspection", use_container_width=True, help="Analyze uploaded image or video stream"):
+            st.session_state["nav_radio"] = PAGE_IMAGE_VIDEO_ANALYSIS
+            st.session_state["current_page"] = PAGE_IMAGE_VIDEO_ANALYSIS
+            st.rerun()
+    with q_col2:
+        if st.button("📄  View Reports", key="quick_btn_reports", use_container_width=True, help="Review audit logs and export PDF/CSV reports"):
+            st.session_state["nav_radio"] = PAGE_REPORTS_EXPORT
+            st.session_state["current_page"] = PAGE_REPORTS_EXPORT
+            st.rerun()
+    with q_col3:
+        if st.button("🤖  AI Investigations", key="quick_btn_investigation", use_container_width=True, help="Autonomous LangGraph multi-agent safety incident triage"):
+            st.session_state["nav_radio"] = PAGE_LANGGRAPH_INVESTIGATION
+            st.session_state["current_page"] = PAGE_LANGGRAPH_INVESTIGATION
+            st.rerun()
+    with q_col4:
+        if st.button("📚  Document Intelligence", key="quick_btn_docs", use_container_width=True, help="Ingest safety policies, SOPs, and query EHS knowledge base"):
+            st.session_state["nav_radio"] = PAGE_DOCUMENT_INGESTION
+            st.session_state["current_page"] = PAGE_DOCUMENT_INGESTION
+            st.rerun()
+
+
 def render_kpi_card(title: str, value: Any, description: str = "", icon: str = "📊", delta: Optional[str] = None, delta_type: str = "normal"):
     """Renders a Taste Skill high-contrast enterprise KPI metric card."""
     delta_html = ""
@@ -211,11 +279,11 @@ def render_kpi_card(title: str, value: Any, description: str = "", icon: str = "
     render_html(f"""
     <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:0.95rem 1.15rem; box-shadow:0 1px 3px rgba(0,0,0,0.03); transition:all 0.18s ease;">
         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#87909D;">{title}</div>
-            <div style="width:34px; height:34px; border-radius:8px; background:#EAF2FF; display:flex; align-items:center; justify-content:center; font-size:1.15rem; color:#172B4D;">{icon}</div>
+            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#64748B;">{title}</div>
+            <div style="width:34px; height:34px; border-radius:8px; background:#EFF6FF; border:1px solid #BFDBFE; display:flex; align-items:center; justify-content:center; font-size:1.15rem; color:#2563EB;">{icon}</div>
         </div>
-        <div style="font-size:1.85rem; font-weight:800; color:#171A21; letter-spacing:-0.025em; margin:0.35rem 0 0.15rem 0; line-height:1.15;">{value}</div>
-        <div style="font-size:0.78rem; color:#5B6472;">{description}</div>
+        <div style="font-size:1.85rem; font-weight:800; color:#0F172A; letter-spacing:-0.025em; margin:0.35rem 0 0.15rem 0; line-height:1.15;">{value}</div>
+        <div style="font-size:0.78rem; color:#64748B;">{description}</div>
         {delta_html}
     </div>
     """)
@@ -225,8 +293,8 @@ def render_section_header(title: str, subtitle: str = ""):
     """Renders a section divider with subtitle."""
     render_html(f"""
     <div style="margin: 1.25rem 0 0.65rem 0;">
-        <div style="font-size:1.05rem; font-weight:800; color:#171A21; letter-spacing:-0.02em;">{title}</div>
-        {f'<div style="font-size:0.8rem; color:#5B6472; margin-top:0.15rem;">{subtitle}</div>' if subtitle else ''}
+        <div style="font-size:1.05rem; font-weight:800; color:#0F172A; letter-spacing:-0.02em;">{title}</div>
+        {f'<div style="font-size:0.8rem; color:#64748B; margin-top:0.15rem;">{subtitle}</div>' if subtitle else ''}
     </div>
     """)
 
@@ -234,34 +302,34 @@ def render_section_header(title: str, subtitle: str = ""):
 def render_risk_matrix_5x5(sev: int = 3, lik: int = 2, score: int = 6, level: str = "Medium"):
     """Renders an interactive-looking, accurate 5x5 OSHA / ISO 45001 Enterprise Risk Matrix."""
     level_color_map = {
-        "Low": ("#E8F6F0", "#16845B", "#A4DFC5"),
-        "Medium": ("#FEF7EA", "#D99A22", "#F8D89B"),
-        "High": ("#FDF1F1", "#D94B4B", "#F7BDBD"),
-        "Critical": ("#FADBD8", "#991B1B", "#E6B0AA")
+        "Low": ("#F0FDF4", "#16A34A", "#BBF7D0"),
+        "Medium": ("#FFFBEB", "#D97706", "#FDE68A"),
+        "High": ("#FEF2F2", "#EF4444", "#FECACA"),
+        "Critical": ("#450A0A", "#FFFFFF", "#991B1B")
     }
-    bg_pill, txt_pill, bdr_pill = level_color_map.get(level, ("#F1F3F5", "#5B6472", "#D6DCE2"))
-    
+    bg_pill, txt_pill, bdr_pill = level_color_map.get(level, ("#F8FAFC", "#64748B", "#E2E8F0"))
+
     sev_labels = {5: "Critical (5)", 4: "Major (4)", 3: "Moderate (3)", 2: "Minor (2)", 1: "Negligible (1)"}
     lik_labels = {1: "Rare (1)", 2: "Unlikely (2)", 3: "Possible (3)", 4: "Likely (4)", 5: "Almost Certain (5)"}
-    
+
     rows_html = []
     for s_val in [5, 4, 3, 2, 1]:
-        cells = [f'<td style="font-weight:700; font-size:0.75rem; color:#5B6472; padding:0.45rem; background:#F8FAFC; border:1px solid #E2E8F0; width:110px;">{sev_labels[s_val]}</td>']
+        cells = [f'<td style="font-weight:700; font-size:0.75rem; color:#64748B; padding:0.45rem; background:#F8FAFC; border:1px solid #E2E8F0; width:110px;">{sev_labels[s_val]}</td>']
         for l_val in [1, 2, 3, 4, 5]:
             prod = s_val * l_val
             if prod >= 15:
-                c_bg, c_txt, c_bdr = "#FDF1F1", "#D94B4B", "#F7BDBD"
+                c_bg, c_txt, c_bdr = "#FEF2F2", "#EF4444", "#FECACA"
             elif prod >= 10:
-                c_bg, c_txt, c_bdr = "#FEF7EA", "#D99A22", "#F8D89B"
+                c_bg, c_txt, c_bdr = "#FFFBEB", "#D97706", "#FDE68A"
             elif prod >= 5:
-                c_bg, c_txt, c_bdr = "#FFFBEB", "#92400E", "#FDE68A"
+                c_bg, c_txt, c_bdr = "#FEF3C7", "#B45309", "#FCD34D"
             else:
-                c_bg, c_txt, c_bdr = "#E8F6F0", "#16845B", "#A4DFC5"
-            
+                c_bg, c_txt, c_bdr = "#F0FDF4", "#16A34A", "#BBF7D0"
+
             is_active = (s_val == sev and l_val == lik)
-            active_style = "box-shadow: 0 0 0 2.5px #172B4D; font-weight:800; transform: scale(1.04); z-index:2; position:relative;" if is_active else ""
-            marker = f'<div style="font-size:0.65rem; font-weight:800; color:#172B4D;">📍 {prod} ACTIVE</div>' if is_active else f'<div style="font-size:0.78rem; font-weight:600; color:{c_txt};">{prod}</div>'
-            
+            active_style = "box-shadow: 0 0 0 2.5px #0F172A; font-weight:800; transform: scale(1.04); z-index:2; position:relative;" if is_active else ""
+            marker = f'<div style="font-size:0.65rem; font-weight:800; color:#0F172A;">📍 {prod} ACTIVE</div>' if is_active else f'<div style="font-size:0.78rem; font-weight:600; color:{c_txt};">{prod}</div>'
+
             cell_html = f'''
             <td style="padding:0.45rem; text-align:center; background:{c_bg}; border:1px solid {c_bdr}; {active_style}">
                 {marker}
@@ -269,17 +337,17 @@ def render_risk_matrix_5x5(sev: int = 3, lik: int = 2, score: int = 6, level: st
             '''
             cells.append(cell_html)
         rows_html.append(f"<tr>{''.join(cells)}</tr>")
-    
-    header_cols = ['<th style="padding:0.45rem; background:#F1F3F5; font-size:0.72rem; color:#171A21; border:1px solid #E2E8F0;">Severity \\ Likelihood</th>']
+
+    header_cols = ['<th style="padding:0.45rem; background:#F8FAFC; font-size:0.72rem; color:#0F172A; font-weight:700; border:1px solid #E2E8F0;">Severity \\ Likelihood</th>']
     for l_val in [1, 2, 3, 4, 5]:
-        header_cols.append(f'<th style="padding:0.45rem; background:#F1F3F5; font-size:0.72rem; color:#171A21; border:1px solid #E2E8F0;">{lik_labels[l_val]}</th>')
-    
+        header_cols.append(f'<th style="padding:0.45rem; background:#F8FAFC; font-size:0.72rem; color:#0F172A; font-weight:700; border:1px solid #E2E8F0;">{lik_labels[l_val]}</th>')
+
     table_html = f"""
-    <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:1.1rem; box-shadow:0 1px 3px rgba(0,0,0,0.03); margin:0.75rem 0;">
+    <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:1.25rem; box-shadow:0 2px 8px rgba(15,23,42,0.04); margin:0.75rem 0;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem;">
             <div>
-                <span style="font-size:0.95rem; font-weight:800; color:#171A21;">OSHA / ISO 45001 Enterprise Risk Matrix (5×5)</span>
-                <span style="font-size:0.75rem; color:#5B6472; margin-left:0.5rem;">Severity ({sev}) × Likelihood ({lik}) = <b>Composite Score {score}/25</b></span>
+                <span style="font-size:0.95rem; font-weight:800; color:#0F172A;">OSHA / ISO 45001 Enterprise Risk Matrix (5×5)</span>
+                <span style="font-size:0.75rem; color:#64748B; margin-left:0.5rem;">Severity ({sev}) × Likelihood ({lik}) = <b>Composite Score {score}/25</b></span>
             </div>
             <div>
                 <span style="background:{bg_pill}; color:{txt_pill}; border:1px solid {bdr_pill}; border-radius:9999px; padding:0.22rem 0.75rem; font-size:0.75rem; font-weight:800; text-transform:uppercase;">
@@ -293,11 +361,11 @@ def render_risk_matrix_5x5(sev: int = 3, lik: int = 2, score: int = 6, level: st
                 <tbody>{''.join(rows_html)}</tbody>
             </table>
         </div>
-        <div style="display:flex; gap:1.2rem; justify-content:flex-end; font-size:0.72rem; color:#5B6472; margin-top:0.65rem;">
-            <span><span style="display:inline-block;width:10px;height:10px;background:#E8F6F0;border:1px solid #A4DFC5;border-radius:2px;margin-right:3px;"></span> Low (1-4)</span>
+        <div style="display:flex; gap:1.2rem; justify-content:flex-end; font-size:0.72rem; color:#64748B; margin-top:0.65rem;">
+            <span><span style="display:inline-block;width:10px;height:10px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:2px;margin-right:3px;"></span> Low (1-4)</span>
             <span><span style="display:inline-block;width:10px;height:10px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:2px;margin-right:3px;"></span> Medium (5-9)</span>
-            <span><span style="display:inline-block;width:10px;height:10px;background:#FEF7EA;border:1px solid #F8D89B;border-radius:2px;margin-right:3px;"></span> High (10-14)</span>
-            <span><span style="display:inline-block;width:10px;height:10px;background:#FDF1F1;border:1px solid #F7BDBD;border-radius:2px;margin-right:3px;"></span> Critical (15-25)</span>
+            <span><span style="display:inline-block;width:10px;height:10px;background:#FEF2F2;border:1px solid #FECACA;border-radius:2px;margin-right:3px;"></span> High (10-14)</span>
+            <span><span style="display:inline-block;width:10px;height:10px;background:#450A0A;border:1px solid #991B1B;border-radius:2px;margin-right:3px;"></span> Critical (15-25)</span>
         </div>
     </div>
     """
@@ -307,47 +375,47 @@ def render_risk_matrix_5x5(sev: int = 3, lik: int = 2, score: int = 6, level: st
 def render_hierarchy_of_controls(capa_data: Dict[str, Any]):
     """Renders the standard 4-tier Hierarchy of Controls visual diagram."""
     h_summary = capa_data.get("hierarchy_summary") or {}
-    
+
     elim_text = h_summary.get("elimination") or "Physically remove hazards or lock-out unsafe machinery."
     eng_text = h_summary.get("engineering") or "Isolate personnel from hazard using physical guardrails, physical interlocks, and perimeter barricades."
     admin_text = h_summary.get("administrative") or "Review and enforce OSHA 1910 standard operating procedures, execute pre-shift toolbox talks, and display prominent safety signage."
     ppe_text = h_summary.get("ppe") or "Mandate full PPE compliance (Hardhat, High-Vis Vest, Safety Boots, Eye Goggles) prior to zone entry."
-    
+
     render_html(f"""
-    <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:1.1rem; box-shadow:0 1px 3px rgba(0,0,0,0.03); margin:0.8rem 0;">
-        <div style="font-size:0.95rem; font-weight:800; color:#171A21; margin-bottom:0.25rem;">
+    <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:1.25rem; box-shadow:0 2px 8px rgba(15,23,42,0.04); margin:0.8rem 0;">
+        <div style="font-size:0.95rem; font-weight:800; color:#0F172A; margin-bottom:0.25rem;">
             🏗️ NIOSH / OSHA Hierarchy of Controls Framework
         </div>
-        <div style="font-size:0.78rem; color:#5B6472; margin-bottom:0.85rem;">
+        <div style="font-size:0.78rem; color:#64748B; margin-bottom:0.85rem;">
             Order of effectiveness from most effective physical hazard elimination down to personal protective equipment.
         </div>
-        <div style="background:#F7F8FA; border:1px solid #E2E8F0; border-left:4px solid #172B4D; border-radius:8px; padding:0.65rem 0.9rem; margin-bottom:0.45rem;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-left:4px solid #0F172A; border-radius:8px; padding:0.65rem 0.9rem; margin-bottom:0.45rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700; font-size:0.82rem; color:#172B4D;">1. ELIMINATION &amp; SUBSTITUTION (MOST EFFECTIVE)</span>
+                <span style="font-weight:700; font-size:0.82rem; color:#0F172A;">1. ELIMINATION &amp; SUBSTITUTION (MOST EFFECTIVE)</span>
                 <span class="sv-pill pill-navy">Tier 1</span>
             </div>
-            <div style="font-size:0.8rem; color:#334155; margin-top:0.25rem;">{elim_text}</div>
+            <div style="font-size:0.8rem; color:#475569; margin-top:0.25rem;">{elim_text}</div>
         </div>
-        <div style="background:#F7F8FA; border:1px solid #E2E8F0; border-left:4px solid #0F8B8D; border-radius:8px; padding:0.65rem 0.9rem; margin-bottom:0.45rem;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-left:4px solid #2563EB; border-radius:8px; padding:0.65rem 0.9rem; margin-bottom:0.45rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700; font-size:0.82rem; color:#0F8B8D;">2. ENGINEERING CONTROLS</span>
-                <span class="sv-pill pill-teal">Tier 2</span>
+                <span style="font-weight:700; font-size:0.82rem; color:#2563EB;">2. ENGINEERING CONTROLS</span>
+                <span class="sv-pill pill-blue">Tier 2</span>
             </div>
-            <div style="font-size:0.8rem; color:#334155; margin-top:0.25rem;">{eng_text}</div>
+            <div style="font-size:0.8rem; color:#475569; margin-top:0.25rem;">{eng_text}</div>
         </div>
-        <div style="background:#F7F8FA; border:1px solid #E2E8F0; border-left:4px solid #7357D9; border-radius:8px; padding:0.65rem 0.9rem; margin-bottom:0.45rem;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-left:4px solid #7C3AED; border-radius:8px; padding:0.65rem 0.9rem; margin-bottom:0.45rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700; font-size:0.82rem; color:#7357D9;">3. ADMINISTRATIVE CONTROLS</span>
+                <span style="font-weight:700; font-size:0.82rem; color:#7C3AED;">3. ADMINISTRATIVE CONTROLS</span>
                 <span class="sv-pill pill-purple">Tier 3</span>
             </div>
-            <div style="font-size:0.8rem; color:#334155; margin-top:0.25rem;">{admin_text}</div>
+            <div style="font-size:0.8rem; color:#475569; margin-top:0.25rem;">{admin_text}</div>
         </div>
-        <div style="background:#F7F8FA; border:1px solid #E2E8F0; border-left:4px solid #16845B; border-radius:8px; padding:0.65rem 0.9rem;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-left:4px solid #16A34A; border-radius:8px; padding:0.65rem 0.9rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700; font-size:0.82rem; color:#16845B;">4. PERSONAL PROTECTIVE EQUIPMENT (PPE)</span>
+                <span style="font-weight:700; font-size:0.82rem; color:#16A34A;">4. PERSONAL PROTECTIVE EQUIPMENT (PPE)</span>
                 <span class="sv-pill pill-emerald">Tier 4</span>
             </div>
-            <div style="font-size:0.8rem; color:#334155; margin-top:0.25rem;">{ppe_text}</div>
+            <div style="font-size:0.8rem; color:#475569; margin-top:0.25rem;">{ppe_text}</div>
         </div>
     </div>
     """)
@@ -356,9 +424,11 @@ def render_hierarchy_of_controls(capa_data: Dict[str, Any]):
 def empty_state(icon: str, title: str, subtitle: str = ""):
     render_html(f"""
     <div class="empty-state">
-        <div style="font-size:2.6rem;margin-bottom:0.4rem;">{icon}</div>
-        <div style="font-size:1.05rem;font-weight:800;color:#171A21;">{title}</div>
-        <div style="font-size:0.82rem;margin-top:0.2rem;color:#5B6472;">{subtitle}</div>
+        <div style="width:52px; height:52px; border-radius:12px; background:#F8FAFC; border:1px solid #E2E8F0; display:inline-flex; align-items:center; justify-content:center; font-size:1.85rem; margin-bottom:0.75rem; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+            {icon}
+        </div>
+        <div style="font-size:1.05rem; font-weight:800; color:#0F172A; letter-spacing:-0.02em;">{title}</div>
+        {f'<div style="font-size:0.82rem; margin-top:0.3rem; color:#64748B; max-width:420px; margin-left:auto; margin-right:auto; line-height:1.4;">{subtitle}</div>' if subtitle else ''}
     </div>
     """)
 
@@ -1266,6 +1336,8 @@ def render_executive_dashboard_page():
     enterprise_hud("Executive Safety Analytics & Risk Dashboard", "Plant-wide safety health index, shift risk heatmaps, 5-domain PPE radar, and critical anomaly tracking.")
     tab_overview, tab_shift_heatmaps = st.tabs(["📊 Executive Health & Risk Overview", "🔥 Shift Risk Heatmaps & Longitudinal Intelligence"])
     with tab_overview:
+        render_welcome_section(current_user)
+        st.write("")
         # Time Scope Selection
         fc1, fc2, fc3 = st.columns([1.5, 1.5, 1])
         preset = fc1.selectbox("Inspection Window", ["Last 30 Days", "Today", "Last 7 Days", "Last 90 Days", "Custom Range"], key="dash_scope_preset")
@@ -2851,7 +2923,7 @@ def render_recorded_events_page():
             from services.multimodal.review_queue import get_review_queue, approve_event, reject_event
             queue_items = get_review_queue(limit=50)
             if not queue_items:
-                st.info("✅ No safety events currently pending human review.")
+                empty_state("✅", "Review Queue Clear", "No safety violation events currently require supervisor review.")
             else:
                 st.markdown(f"**{len(queue_items)} high-confidence items awaiting supervisor verification:**")
                 for q_ev in queue_items:
@@ -3052,7 +3124,7 @@ def render_recorded_events_page():
         st.write("")
 
         if not filtered_items:
-            st.info("No recorded safety violations match the selected filter criteria.")
+            empty_state("📋", "No Matching Violations Found", "No recorded safety violations match the selected filter criteria.")
         else:
             for item in filtered_items:
                 item_id = item["item_id"]
@@ -3165,7 +3237,7 @@ def render_remediation_workflows_page():
                     st.rerun()
 
         if not hist_records:
-            st.caption("No past investigation sessions recorded in the database.")
+            empty_state("🗄️", "No Investigation Sessions Recorded", "No prior incident investigation sessions found in the database.")
         else:
             for item in hist_records:
                 i_id = item["id"]
@@ -3300,6 +3372,9 @@ def render_audit_reports_page():
     stats_audit = get_dashboard_stats(uid, role, s_rep, e_rep)
     tag = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+    if not v_audit:
+        empty_state("📋", "No Violation Records in Audit Window", "No infractions were recorded for the selected date range. Generated reports will document 100% safety compliance.")
+
     st.markdown(f"**Audit Dataset Scope:** `{len(v_audit)}` violation record(s) matching criteria from `{s_rep}` to `{e_rep}`.")
 
     b1, b2, b3 = st.columns(3)
@@ -3307,12 +3382,13 @@ def render_audit_reports_page():
     with b1:
         st.markdown("### 📄 Formal PDF Audit Report")
         st.caption("Includes executive summary, OSHA compliance KPIs, violation logs, and sign-off certification block.")
-        pdf_bytes = generate_pdf_report(
-            violations=v_audit,
-            stats=stats_audit,
-            reporting_period=f"{s_rep} to {e_rep}",
-            generated_by=f"{current_user['full_name']} ({role.upper()})"
-        )
+        with st.spinner("Compiling formal PDF audit report..."):
+            pdf_bytes = generate_pdf_report(
+                violations=v_audit,
+                stats=stats_audit,
+                reporting_period=f"{s_rep} to {e_rep}",
+                generated_by=f"{current_user['full_name']} ({role.upper()})"
+            )
         st.download_button(
             "📥 Download Official PDF Report",
             pdf_bytes,
@@ -4153,10 +4229,11 @@ def render_langgraph_ai_safety_investigation_page():
             # PDF Download Button
             st.divider()
             try:
-                pdf_bytes = generate_investigation_pdf_report(
-                    inv_data,
-                    generated_by=f"{current_user.get('full_name', 'Safety Officer')} ({role.upper()})"
-                )
+                with st.spinner("Compiling formal investigation PDF report..."):
+                    pdf_bytes = generate_investigation_pdf_report(
+                        inv_data,
+                        generated_by=f"{current_user.get('full_name', 'Safety Officer')} ({role.upper()})"
+                    )
                 st.download_button(
                     "📄 Download Formal Investigation PDF Report",
                     data=pdf_bytes,
@@ -4176,7 +4253,7 @@ def render_langgraph_ai_safety_investigation_page():
     with st.expander("🗄️ Past AI Safety Investigations History", expanded=False):
         all_invs = list_investigations(limit=30)
         if not all_invs:
-            st.caption("No past AI safety investigations recorded in database.")
+            empty_state("🗄️", "No Past Investigations Found", "No archived AI safety investigation reports recorded in the database.")
         else:
             st.markdown(f"**Archived Investigation Reports ({len(all_invs)} stored in SQLite):**")
             for h_inv in all_invs:

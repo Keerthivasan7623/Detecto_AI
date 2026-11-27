@@ -25,25 +25,25 @@ def _render_card_markup(
     subtext: str,
     pill_text: str,
     pill_class: str,
-    accent_border_color: str = "#0F8B8D"
+    accent_border_color: str = "#2563EB"
 ) -> str:
-    """Generates clean HTML string for a single KPI card."""
+    """Generates clean HTML string for a single KPI card with high-contrast typography and subtle elevation."""
     return f"""
-    <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-top:3px solid {accent_border_color}; border-radius:12px; padding:1rem 1.15rem; box-shadow:0 1px 3px rgba(0,0,0,0.03); min-height:130px; display:flex; flex-direction:column; justify-content:space-between; margin-bottom:0.75rem;">
+    <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-top:3.5px solid {accent_border_color}; border-radius:12px; padding:1.1rem 1.25rem; box-shadow:0 2px 8px rgba(15,23,42,0.04); min-height:135px; display:flex; flex-direction:column; justify-content:space-between; margin-bottom:0.75rem;">
         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:#5B6472;">
+            <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#64748B;">
                 {title}
             </div>
-            <div style="width:34px; height:34px; border-radius:8px; background:#F1F3F5; display:flex; align-items:center; justify-content:center; font-size:1.15rem; color:#172B4D;">
+            <div style="width:36px; height:36px; border-radius:10px; background:#F8FAFC; border:1px solid #E2E8F0; display:flex; align-items:center; justify-content:center; font-size:1.15rem; color:#0F172A;">
                 {icon}
             </div>
         </div>
-        <div style="font-size:1.95rem; font-weight:800; color:#171A21; letter-spacing:-0.03em; margin:0.35rem 0 0.15rem 0; line-height:1.15;">
+        <div style="font-size:2rem; font-weight:800; color:#0F172A; letter-spacing:-0.03em; margin:0.35rem 0 0.15rem 0; line-height:1.15;">
             {value_display}
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.35rem; margin-top:0.25rem;">
-            <span style="font-size:0.75rem; color:#87909D;">{subtext}</span>
-            <span class="sv-pill {pill_class}" style="font-size:0.68rem; padding:0.12rem 0.5rem;">{pill_text}</span>
+            <span style="font-size:0.75rem; color:#64748B; font-weight:500;">{subtext}</span>
+            <span class="sv-pill {pill_class}" style="font-size:0.68rem; padding:0.15rem 0.55rem;">{pill_text}</span>
         </div>
     </div>
     """
@@ -144,28 +144,28 @@ def render_kpi_cards(
             comp_sub = "Exceeds Safety Threshold"
             comp_pill = "Exemplary (Grade A)"
             comp_pill_cls = "pill-emerald"
-            comp_accent = "#16845B"
+            comp_accent = "#16A34A"
         elif comp_pct >= 80.0:
             comp_sub = "OSHA Standard Met"
             comp_pill = "Compliant (Grade B)"
             comp_pill_cls = "pill-teal"
-            comp_accent = "#0F8B8D"
+            comp_accent = "#2563EB"
         elif comp_pct >= 65.0:
             comp_sub = "Corrective Review Advised"
             comp_pill = "Warning (Grade C)"
             comp_pill_cls = "pill-amber"
-            comp_accent = "#D99A22"
+            comp_accent = "#F59E0B"
         else:
             comp_sub = "Critical Incident Ratio"
             comp_pill = "Non-Compliant"
             comp_pill_cls = "pill-red"
-            comp_accent = "#D94B4B"
+            comp_accent = "#EF4444"
     else:
         comp_val = "N/A"
         comp_sub = "No inspections in period"
         comp_pill = "Insufficient Data"
         comp_pill_cls = "pill-slate"
-        comp_accent = "#87909D"
+        comp_accent = "#64748B"
 
     # -------------------------------------------------------------
     # RENDER FOUR HORIZONTAL CARDS
@@ -180,7 +180,7 @@ def render_kpi_cards(
             subtext=insp_sub,
             pill_text=insp_pill,
             pill_class=insp_pill_cls,
-            accent_border_color="#172B4D"
+            accent_border_color="#2563EB"
         )
         _clean_html_render(card1_html)
 
@@ -192,7 +192,7 @@ def render_kpi_cards(
             subtext=viol_sub,
             pill_text=viol_pill,
             pill_class=viol_pill_cls,
-            accent_border_color="#D94B4B" if unresolved_count > 0 else "#16845B"
+            accent_border_color="#EF4444" if unresolved_count > 0 else "#16A34A"
         )
         _clean_html_render(card2_html)
 
@@ -204,7 +204,7 @@ def render_kpi_cards(
             subtext=res_sub,
             pill_text=res_pill,
             pill_class=res_pill_cls,
-            accent_border_color="#16845B"
+            accent_border_color="#16A34A"
         )
         _clean_html_render(card3_html)
 

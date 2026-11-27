@@ -21,34 +21,34 @@ import streamlit as st
 LIGHT_PALETTE = {
     "name": "Light Mode",
     "bg_primary": "#FFFFFF",
-    "bg_soft": "#F7F8FA",
-    "bg_secondary": "#F1F3F5",
+    "bg_soft": "#F8FAFC",
+    "bg_secondary": "#F1F5F9",
     "surface": "#FFFFFF",
     "surface_border": "#E2E8F0",
-    "surface_border_hover": "#0F8B8D",
-    "text_primary": "#171A21",
-    "text_secondary": "#5B6472",
-    "text_muted": "#87909D",
+    "surface_border_hover": "#2563EB",
+    "text_primary": "#0F172A",
+    "text_secondary": "#475569",
+    "text_muted": "#64748B",
     
     # Brand Accents
-    "brand_navy": "#172B4D",
-    "brand_teal": "#0F8B8D",
-    "brand_purple": "#7357D9",
-    "brand_light_blue": "#EAF2FF",
+    "brand_navy": "#0F172A",
+    "brand_teal": "#0D9488",
+    "brand_purple": "#7C3AED",
+    "brand_light_blue": "#EFF6FF",
     
     # Status Colors
-    "status_success": "#16845B",
-    "status_warning": "#D99A22",
-    "status_danger": "#D94B4B",
-    "status_info": "#3276C8",
+    "status_success": "#16A34A",
+    "status_warning": "#F59E0B",
+    "status_danger": "#EF4444",
+    "status_info": "#2563EB",
     
     # Legacy Color Mappings for backward-compatibility
-    "accent_cyan": "#0F8B8D",
-    "accent_blue": "#0F8B8D",
-    "accent_dark_blue": "#172B4D",
-    "accent_emerald": "#16845B",
-    "accent_red": "#D94B4B",
-    "accent_amber": "#D99A22",
+    "accent_cyan": "#0D9488",
+    "accent_blue": "#2563EB",
+    "accent_dark_blue": "#0F172A",
+    "accent_emerald": "#16A34A",
+    "accent_red": "#EF4444",
+    "accent_amber": "#F59E0B",
     
     # Containers & Cards
     "hud_bg": "linear-gradient(135deg, #FFFFFF 0%, #F7F8FA 50%, #F1F3F5 100%)",
@@ -66,11 +66,11 @@ LIGHT_PALETTE = {
     
     # Plotly Chart Integration
     "plotly_template": "plotly_white",
-    "chart_grid": "rgba(23, 26, 33, 0.06)",
-    "chart_radar_benchmark_fill": "rgba(15, 139, 141, 0.08)",
-    "chart_radar_benchmark_line": "rgba(15, 139, 141, 0.45)",
-    "chart_radar_actual_fill": "rgba(22, 132, 91, 0.20)",
-    "chart_radar_actual_line": "#16845B",
+    "chart_grid": "#F1F5F9",
+    "chart_radar_benchmark_fill": "rgba(37, 99, 235, 0.05)",
+    "chart_radar_benchmark_line": "rgba(37, 99, 235, 0.50)",
+    "chart_radar_actual_fill": "rgba(22, 163, 74, 0.16)",
+    "chart_radar_actual_line": "#16A34A",
 }
 
 # DARK_PALETTE maps to light palette values to guarantee dark styling is completely eliminated
@@ -111,31 +111,31 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
 
     :root {
         --bg-primary: #FFFFFF;
-        --bg-soft: #F7F8FA;
-        --bg-secondary: #F1F3F5;
+        --bg-soft: #F8FAFC;
+        --bg-secondary: #F1F5F9;
         --surface: #FFFFFF;
         --surface-border: #E2E8F0;
-        --surface-border-hover: #0F8B8D;
-        --text-primary: #171A21;
-        --text-secondary: #5B6472;
-        --text-muted: #87909D;
+        --surface-border-hover: #2563EB;
+        --text-primary: #0F172A;
+        --text-secondary: #475569;
+        --text-muted: #64748B;
         
-        --brand-navy: #172B4D;
-        --brand-teal: #0F8B8D;
-        --brand-purple: #7357D9;
-        --brand-light-blue: #EAF2FF;
+        --brand-navy: #0F172A;
+        --brand-teal: #0D9488;
+        --brand-purple: #7C3AED;
+        --brand-light-blue: #EFF6FF;
         
-        --status-success: #16845B;
-        --status-warning: #D99A22;
-        --status-danger: #D94B4B;
-        --status-info: #3276C8;
+        --status-success: #16A34A;
+        --status-warning: #F59E0B;
+        --status-danger: #EF4444;
+        --status-info: #2563EB;
 
         /* Legacy Aliases */
-        --accent-blue: #0F8B8D;
-        --accent-dark-blue: #172B4D;
-        --accent-emerald: #16845B;
-        --accent-amber: #D99A22;
-        --accent-red: #D94B4B;
+        --accent-blue: #2563EB;
+        --accent-dark-blue: #0F172A;
+        --accent-emerald: #16A34A;
+        --accent-amber: #F59E0B;
+        --accent-red: #EF4444;
         
         --hud-bg: linear-gradient(135deg, #FFFFFF 0%, #F7F8FA 50%, #F1F3F5 100%);
         --hud-border: #E2E8F0;
@@ -219,31 +219,31 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         transition: border-color 0.2s ease;
     }
     .sidebar-brand-card:hover {
-        border-color: var(--brand-teal);
+        border-color: #2563EB;
     }
     .brand-icon-box {
         width: 40px;
         height: 40px;
         border-radius: 10px;
-        background: linear-gradient(135deg, #172B4D 0%, #0F8B8D 100%);
+        background: linear-gradient(135deg, #0F172A 0%, #2563EB 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.3rem;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 8px rgba(15, 139, 141, 0.25);
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
         flex-shrink: 0;
     }
     .brand-title {
         font-size: 1.05rem;
         font-weight: 800;
         letter-spacing: -0.025em;
-        color: var(--brand-navy) !important;
+        color: #0F172A !important;
         line-height: 1.15;
         margin: 0;
     }
     .brand-title-accent {
-        color: var(--brand-teal) !important;
+        color: #2563EB !important;
     }
     .brand-subtitle {
         font-size: 0.65rem;
@@ -261,16 +261,16 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         border-radius: 9999px;
         font-size: 0.65rem;
         font-weight: 700;
-        background: #E8F6F0;
-        color: #16845B !important;
-        border: 1px solid #A4DFC5;
+        background: #F0FDF4;
+        color: #16A34A !important;
+        border: 1px solid #BBF7D0;
         flex-shrink: 0;
     }
     .pulse-dot-emerald {
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        background-color: var(--status-success);
+        background-color: #16A34A;
         display: inline-block;
     }
 
@@ -288,20 +288,21 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         transition: all 0.2s ease;
     }
     .sidebar-user-card:hover {
-        border-color: var(--surface-border-hover);
+        border-color: #2563EB;
         transform: translateY(-1px);
     }
     .user-avatar-badge {
         width: 36px;
         height: 36px;
         border-radius: 8px;
-        background: linear-gradient(135deg, #172B4D 0%, #0F8B8D 100%);
+        background: linear-gradient(135deg, #0F172A 0%, #2563EB 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         color: #ffffff !important;
         font-weight: 800;
         font-size: 0.85rem;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
         flex-shrink: 0;
     }
     .user-card-name {
@@ -322,9 +323,9 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
 
     /* Active Operational Category Banner */
     .sidebar-category-card {
-        background: var(--bg-secondary) !important;
-        border: 1px solid rgba(15, 139, 141, 0.2) !important;
-        border-left: 3.5px solid var(--brand-teal) !important;
+        background: #F8FAFC !important;
+        border: 1px solid #E2E8F0 !important;
+        border-left: 3.5px solid #2563EB !important;
         border-radius: 8px;
         padding: 0.45rem 0.75rem;
         margin-top: 0.35rem;
@@ -335,7 +336,7 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background-color: var(--brand-teal);
+        background-color: #2563EB;
     }
     .sidebar-category-label {
         font-size: 0.64rem;
@@ -347,7 +348,7 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
     .sidebar-category-title {
         font-size: 0.74rem;
         font-weight: 800;
-        color: var(--brand-navy) !important;
+        color: #0F172A !important;
         margin-top: 0.12rem;
     }
 
@@ -383,12 +384,12 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         margin: 0 !important;
     }
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
-        background: var(--bg-soft) !important;
+        background: #F8FAFC !important;
         border-color: #CBD5E1 !important;
         transform: translateX(3px) !important;
     }
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:hover div[data-testid="stMarkdownContainer"] p {
-        color: var(--brand-teal) !important;
+        color: #2563EB !important;
         font-weight: 600 !important;
     }
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked),
@@ -396,10 +397,10 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input[aria-checked="true"]),
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input[type="radio"]:checked),
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label[aria-checked="true"] {
-        background: linear-gradient(90deg, rgba(15, 139, 141, 0.08) 0%, #FFFFFF 100%) !important;
-        border: 1px solid rgba(15, 139, 141, 0.35) !important;
-        border-left: 4px solid var(--brand-teal) !important;
-        box-shadow: 0 1px 4px rgba(15, 139, 141, 0.08) !important;
+        background: linear-gradient(90deg, rgba(37, 99, 235, 0.08) 0%, #FFFFFF 100%) !important;
+        border: 1px solid rgba(37, 99, 235, 0.35) !important;
+        border-left: 4px solid #2563EB !important;
+        box-shadow: 0 1px 4px rgba(37, 99, 235, 0.08) !important;
         transform: translateX(2px) !important;
     }
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked) div[data-testid="stMarkdownContainer"] p,
@@ -407,7 +408,7 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input[aria-checked="true"]) div[data-testid="stMarkdownContainer"] p,
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input[type="radio"]:checked) div[data-testid="stMarkdownContainer"] p,
     [data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] > label[aria-checked="true"] div[data-testid="stMarkdownContainer"] p {
-        color: var(--text-primary) !important;
+        color: #0F172A !important;
         font-weight: 700 !important;
     }
 
@@ -512,44 +513,44 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         letter-spacing: 0.04em;
     }
     .pill-teal {
-        background: #E6F7F7 !important;
-        color: #0F8B8D !important;
-        border: 1px solid #A2E5E6 !important;
+        background: #F0FDFA !important;
+        color: #0D9488 !important;
+        border: 1px solid #99F6E4 !important;
     }
     .pill-navy {
-        background: #EAEFF5 !important;
-        color: #172B4D !important;
-        border: 1px solid #B4C3D8 !important;
+        background: #F1F5F9 !important;
+        color: #0F172A !important;
+        border: 1px solid #CBD5E1 !important;
     }
     .pill-purple {
-        background: #F2EFFC !important;
-        color: #7357D9 !important;
-        border: 1px solid #D3C6F7 !important;
+        background: #FAF5FF !important;
+        color: #7C3AED !important;
+        border: 1px solid #E9D5FF !important;
     }
     .pill-emerald, .pill-success {
-        background: #E8F6F0 !important;
-        color: #16845B !important;
-        border: 1px solid #A4DFC5 !important;
+        background: #F0FDF4 !important;
+        color: #16A34A !important;
+        border: 1px solid #BBF7D0 !important;
     }
     .pill-amber, .pill-warning {
-        background: #FEF7EA !important;
-        color: #D99A22 !important;
-        border: 1px solid #F8D89B !important;
+        background: #FFFBEB !important;
+        color: #D97706 !important;
+        border: 1px solid #FDE68A !important;
     }
     .pill-red, .pill-danger {
-        background: #FDF1F1 !important;
-        color: #D94B4B !important;
-        border: 1px solid #F7BDBD !important;
+        background: #FEF2F2 !important;
+        color: #EF4444 !important;
+        border: 1px solid #FECACA !important;
     }
     .pill-blue, .pill-info {
-        background: #EDF4FC !important;
-        color: #3276C8 !important;
-        border: 1px solid #B4D4F3 !important;
+        background: #EFF6FF !important;
+        color: #2563EB !important;
+        border: 1px solid #BFDBFE !important;
     }
     .pill-slate {
-        background: #F1F3F5 !important;
-        color: #5B6472 !important;
-        border: 1px solid #D6DCE2 !important;
+        background: #F8FAFC !important;
+        color: #64748B !important;
+        border: 1px solid #E2E8F0 !important;
     }
 
     /* ===================================================
@@ -625,16 +626,16 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         padding: 0.45rem 1rem;
     }
     .stButton > button[kind="primary"] {
-        background: #0F8B8D !important;
+        background: #2563EB !important;
         color: #ffffff !important;
         border: none !important;
-        box-shadow: 0 1px 4px rgba(15, 139, 141, 0.25);
+        box-shadow: 0 1px 4px rgba(37, 99, 235, 0.25);
     }
     .stButton > button[kind="primary"]:hover {
-        background: #0c7274 !important;
+        background: #1D4ED8 !important;
         color: #FFFFFF !important;
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(15, 139, 141, 0.3);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
     .stButton > button[kind="secondary"], .stButton > button:not([kind="primary"]) {
         background: #FFFFFF !important;
@@ -642,10 +643,11 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         border: 1px solid var(--input-border) !important;
     }
     .stButton > button:not([kind="primary"]):hover {
-        border-color: var(--brand-teal) !important;
-        color: var(--brand-teal) !important;
-        background: var(--bg-soft) !important;
+        border-color: #2563EB !important;
+        color: #2563EB !important;
+        background: #F8FAFC !important;
         transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
     }
 
     /* ===================================================
@@ -705,15 +707,63 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
 
     /* Alert Banners */
     .alert-banner {
-        background: #FDF1F1 !important;
+        background: #FEF2F2 !important;
         border-left: 4px solid var(--status-danger) !important;
-        border: 1px solid #F7BDBD;
+        border: 1px solid #FECACA;
         border-radius: 8px;
         padding: 0.75rem 1rem;
         margin: 0.8rem 0;
-        color: #D94B4B !important;
+        color: #B91C1C !important;
         font-size: 0.88rem;
         font-weight: 500;
+    }
+
+    /* Streamlit Alert Callouts */
+    div[data-testid="stAlert"] {
+        border-radius: 8px !important;
+        border-width: 1px !important;
+        border-style: solid !important;
+        padding: 0.75rem 1rem !important;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02) !important;
+    }
+    div[data-testid="stAlert"]:has([data-testid="stNotificationContentError"]) {
+        background-color: #FEF2F2 !important;
+        border-color: #FECACA !important;
+        color: #B91C1C !important;
+    }
+    div[data-testid="stAlert"]:has([data-testid="stNotificationContentSuccess"]) {
+        background-color: #F0FDF4 !important;
+        border-color: #BBF7D0 !important;
+        color: #15803D !important;
+    }
+    div[data-testid="stAlert"]:has([data-testid="stNotificationContentInfo"]) {
+        background-color: #EFF6FF !important;
+        border-color: #BFDBFE !important;
+        color: #1D4ED8 !important;
+    }
+    div[data-testid="stAlert"]:has([data-testid="stNotificationContentWarning"]) {
+        background-color: #FFFBEB !important;
+        border-color: #FDE68A !important;
+        color: #B45309 !important;
+    }
+
+    /* Responsive Layout & Overflow Protection */
+    .main .block-container {
+        max-width: 100% !important;
+        padding-top: 1.5rem !important;
+        padding-bottom: 2.5rem !important;
+        overflow-x: hidden !important;
+    }
+    img, video, canvas, svg {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+    div[data-testid="column"] {
+        min-width: 0 !important;
+    }
+    .stTable, div[data-testid="stDataFrame"] {
+        max-width: 100% !important;
+        overflow-x: auto !important;
     }
 
     /* Empty State */
@@ -721,9 +771,10 @@ def apply_theme_css(theme_mode: Optional[str] = None) -> None:
         background: #FFFFFF;
         border: 1px dashed var(--surface-border);
         border-radius: 12px;
-        padding: 3rem 1.5rem;
+        padding: 2.75rem 1.5rem;
         text-align: center;
         margin: 1rem 0;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
     }
 
     /* Divider */
@@ -803,24 +854,24 @@ def apply_chart_theme(fig, theme_mode: Optional[str] = None):
             family=ct["font_family"],
             color="#171A21"
         ),
-        title=dict(font=dict(color="#171A21", size=14)),
-        legend=dict(font=dict(color="#171A21"))
+        title=dict(font=dict(color="#0F172A", size=14)),
+        legend=dict(font=dict(color="#0F172A"))
     )
 
     # Standard Cartesian axes update
     fig.update_xaxes(
-        gridcolor="rgba(23, 26, 33, 0.06)",
-        zerolinecolor="rgba(23, 26, 33, 0.06)",
-        color="#171A21",
-        tickfont=dict(color="#5B6472", size=11),
-        title_font=dict(color="#171A21", size=12)
+        gridcolor="#F1F5F9",
+        zerolinecolor="#E2E8F0",
+        color="#0F172A",
+        tickfont=dict(color="#64748B", size=11),
+        title_font=dict(color="#0F172A", size=12)
     )
     fig.update_yaxes(
-        gridcolor="rgba(23, 26, 33, 0.06)",
-        zerolinecolor="rgba(23, 26, 33, 0.06)",
-        color="#171A21",
-        tickfont=dict(color="#5B6472", size=11),
-        title_font=dict(color="#171A21", size=12)
+        gridcolor="#F1F5F9",
+        zerolinecolor="#E2E8F0",
+        color="#0F172A",
+        tickfont=dict(color="#64748B", size=11),
+        title_font=dict(color="#0F172A", size=12)
     )
 
     # Radar / Polar charts update
@@ -828,14 +879,14 @@ def apply_chart_theme(fig, theme_mode: Optional[str] = None):
         fig.update_layout(
             polar=dict(
                 radialaxis=dict(
-                    color="#5B6472",
-                    gridcolor="rgba(23, 26, 33, 0.08)",
-                    tickfont=dict(color="#5B6472")
+                    color="#64748B",
+                    gridcolor="#E2E8F0",
+                    tickfont=dict(color="#64748B")
                 ),
                 angularaxis=dict(
-                    color="#171A21",
-                    gridcolor="rgba(23, 26, 33, 0.08)",
-                    tickfont=dict(color="#171A21")
+                    color="#0F172A",
+                    gridcolor="#E2E8F0",
+                    tickfont=dict(color="#0F172A")
                 )
             )
         )
